@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080910">
+<title>Two Streams — Netflix vs Crunchyroll</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="noise"></div>
+<header class="topbar">
+  <a class="brand" href="#home"><span class="brand-mark">2S</span><span>TWO<span class="brand-light">STREAMS</span></span></a>
+  <nav id="nav"><a href="#compare">Compare</a><a href="#findings">Interview findings</a><a href="#evidence">Evidence</a><a href="#method">Method</a></nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="top-cta" href="#findings">Explore the research <span>↗</span></a>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/comparison-art.png">
+    <source src="assets/original-cinematic-loop.mp4" type="video/mp4">
+  </video>
+  <div class="hero-fallback"></div>
+  <div class="hero-shade"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content reveal">
+    <div class="eyebrow"><span class="live-dot"></span> STREAMING EXPERIENCE STUDY <span class="eyebrow-line"></span> 2026</div>
+    <h1>ONE WORLD.<br><span class="headline-accent">TWO STREAMING</span><br>GIANTS.</h1>
+    <p class="hero-copy">Netflix or Crunchyroll? Explore what viewers really think about their streaming experience.</p>
+    <div class="hero-actions">
+      <a class="btn btn-netflix" href="#netflix">Explore Netflix <span>↗</span></a>
+      <a class="btn btn-crunchy" href="#crunchyroll">Explore Crunchyroll <span>↗</span></a>
+    </div>
+    <div class="hero-footnote"><span>INDEPENDENT USER RESEARCH</span><span>SCROLL TO DISCOVER ↓</span></div>
+  </div>
+  <div class="hero-side-label">CONTENT × CULTURE × EXPERIENCE</div>
+  <div class="hero-index"><b>01</b><span>—</span> THE BIG PICTURE</div>
+</section>
+
+<section class="intro section-pad" id="compare">
+  <div class="section-head reveal"><div><div class="eyebrow">THE BIG PICTURE / 01</div><h2>Two platforms.<br><em>Two different promises.</em></h2></div><p>One is built for broad entertainment. The other puts anime at the centre. The real comparison begins when a viewer presses play.</p></div>
+  <div class="platform-stage">
+    <article class="platform-card netflix-card tilt-card" id="netflix">
+      <div class="platform-top"><span class="platform-kicker">01 / GENERAL ENTERTAINMENT</span><span class="platform-symbol netflix-symbol">N</span></div>
+      <div class="platform-title">NETFLIX</div><div class="platform-subtitle">Stories for every kind of night.</div>
+      <div class="platform-tags"><span>FILMS</span><span>SERIES</span><span>DOCUMENTARIES</span><span>ORIGINALS</span></div>
+      <div class="platform-bottom"><span class="platform-color-dot red-dot"></span><span>THE BROAD-CATALOGUE EXPERIENCE</span><span class="arrow">↗</span></div>
+    </article>
+    <div class="versus"><span>VS</span><i></i><small>THE VIEWER DECIDES</small></div>
+    <article class="platform-card crunchy-card tilt-card" id="crunchyroll">
+      <div class="platform-top"><span class="platform-kicker">02 / ANIME-FIRST STREAMING</span><span class="platform-symbol crunchy-symbol">◉</span></div>
+      <div class="platform-title">CRUNCHYROLL</div><div class="platform-subtitle">A world built around anime.</div>
+      <div class="platform-tags"><span>ANIME</span><span>SIMULCASTS</span><span>DISCOVERY</span><span>COMMUNITY</span></div>
+      <div class="platform-bottom"><span class="platform-color-dot orange-dot"></span><span>THE SPECIALIST-CATALOGUE EXPERIENCE</span><span class="arrow">↗</span></div>
+    </article>
+  </div>
+  <div class="stage-note"><span>INTERACTIVE COMPARISON</span><span>Move your pointer over either panel</span></div>
+</section>
+
+<section class="comparison section-pad">
+  <div class="section-head reveal"><div><div class="eyebrow">THE EXPERIENCE / 02</div><h2>Where the experiences<br><em>meet — and diverge.</em></h2></div><p>Explore the dimensions that shape the decision to stay, subscribe, or switch.</p></div>
+  <div class="comparison-grid">
+    <button class="compare-tile active" data-topic="catalogue"><span class="tile-no">01</span><span class="tile-title">Content variety</span><span class="tile-desc">Broad catalogue vs anime depth</span><span class="tile-arrow">↗</span></button>
+    <button class="compare-tile" data-topic="availability"><span class="tile-no">02</span><span class="tile-title">Anime availability</span><span class="tile-desc">Regional access and catalogue gaps</span><span class="tile-arrow">↗</span></button>
+    <button class="compare-tile" data-topic="subscription"><span class="tile-no">03</span><span class="tile-title">Subscription experience</span><span class="tile-desc">Value, tiers and expectations</span><span class="tile-arrow">↗</span></button>
+    <button class="compare-tile" data-topic="interface"><span class="tile-no">04</span><span class="tile-title">User interface</span><span class="tile-desc">Navigation and playback flow</span><span class="tile-arrow">↗</span></button>
+    <button class="compare-tile" data-topic="recommendations"><span class="tile-no">05</span><span class="tile-title">Recommendations</span><span class="tile-desc">Finding the next thing to watch</span><span class="tile-arrow">↗</span></button>
+    <button class="compare-tile" data-topic="switching"><span class="tile-no">06</span><span class="tile-title">Reasons for switching</span><span class="tile-desc">The moment loyalty changes</span><span class="tile-arrow">↗</span></button>
+  </div>
+  <div class="comparison-detail reveal">
+    <div class="detail-visual"><div class="detail-orbit orbit-one"></div><div class="detail-orbit orbit-two"></div><div class="detail-center" id="detailGlyph">✦</div><div class="detail-label">VIEWER LENS</div></div>
+    <div class="detail-copy"><div class="eyebrow" id="detailEyebrow">DIMENSION 01</div><h3 id="detailTitle">Content variety</h3><p id="detailText">Netflix is positioned as a broad entertainment destination, while Crunchyroll focuses on anime discovery and depth. Which catalogue feels more valuable depends on what the viewer wants to watch.</p><div class="detail-pills" id="detailPills"><span>CATALOGUE FIT</span><span>VIEWING HABITS</span><span>DISCOVERY</span></div></div>
+  </div>
+</section>
+
+<section class="findings section-pad" id="findings">
+  <div class="section-head reveal"><div><div class="eyebrow">VOICE OF THE VIEWER / 03</div><h2>REAL USERS.<br><em>REAL OPINIONS.</em></h2></div><p>Interview evidence belongs at the centre of this comparison. Import the collected sheet to calculate real counts here—no placeholder statistics are presented as findings.</p></div>
+  <div class="data-console">
+    <div class="console-top"><div><span class="live-dot"></span> INTERVIEW DATA CONSOLE</div><span class="console-status" id="dataStatus">WAITING FOR DATA</span></div>
+    <div class="metric-row">
+      <div class="metric"><span class="metric-label">TOTAL RESPONSES</span><strong id="totalCount">—</strong><small>From imported interview rows</small></div>
+      <div class="metric"><span class="metric-label">NETFLIX USERS</span><strong id="netflixCount">—</strong><small>Detected from your sheet</small></div>
+      <div class="metric"><span class="metric-label">CRUNCHYROLL USERS</span><strong id="crunchyCount">—</strong><small>Detected from your sheet</small></div>
+      <div class="metric"><span class="metric-label">SWITCHED USERS</span><strong id="switchCount">—</strong><small>Detected from your sheet</small></div>
+    </div>
+    <div class="data-empty" id="dataEmpty">
+      <div class="empty-icon">↥</div><h3>Your evidence. Your numbers.</h3>
+      <p>Upload a CSV export of the Google Sheet to populate response totals, platform counts, switching patterns and reason summaries.</p>
+      <label class="upload-btn" for="csvInput">Import interview CSV <span>＋</span></label>
+      <input type="file" id="csvInput" accept=".csv,text/csv" hidden>
+      <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1dbR_llxoIBore5OYdywvxecZ2IEjryKi/edit?usp=sharing" target="_blank" rel="noopener">Open the source Google Sheet ↗</a>
+      <p class="micro-note">Google Sheet access could not be verified automatically in this build. Export it as CSV from Google Sheets, then import it here.</p>
+    </div>
+    <div class="data-loaded" id="dataLoaded" hidden>
+      <div class="loaded-head"><div><span class="eyebrow">LIVE FROM YOUR CSV</span><h3 id="loadedTitle">Interview summary</h3></div><button class="text-button" id="resetData">Remove imported data ×</button></div>
+      <div class="insight-grid"><div class="insight-box"><span>PLATFORM SPLIT</span><div class="bar-chart" id="platformChart"></div></div><div class="insight-box"><span>STAY / SWITCH PATTERN</span><div class="bar-chart" id="switchChart"></div></div><div class="insight-box"><span>REASONS MENTIONED</span><div class="reason-list" id="reasonList"></div></div></div>
+      <p class="micro-note" id="csvNote"></p>
+    </div>
+  </div>
+  <div class="quote-strip"><div class="quote-mark">“</div><div><p>“I switched to Crunchyroll, where I could find a much larger collection of One Piece episodes.”</p><span>INTERVIEW NOTE SHARED WITH THE PROJECT</span></div><div class="quote-tag">CATALOGUE GAP → SWITCH</div></div>
+</section>
+
+<section class="insights section-pad">
+  <div class="section-head reveal"><div><div class="eyebrow">WHAT THE EVIDENCE POINTS TO / 04</div><h2>What makes a viewer<br><em>stay or move on?</em></h2></div><p>These are research themes to test against the full interview dataset, not ranked findings or population-wide claims.</p></div>
+  <div class="insight-cards">
+    <article class="insight-card"><span class="insight-index">A / STAY</span><div class="insight-icon red-icon">▤</div><h3>Content that fits the habit</h3><p>A broad mix can serve viewers who switch between films, series and other genres. A specialist library can matter more to anime-first viewers.</p><div class="insight-line red-line"></div></article>
+    <article class="insight-card"><span class="insight-index">B / SWITCH</span><div class="insight-icon orange-icon">↗</div><h3>A title they cannot find</h3><p>Regional catalogue gaps can make a second platform feel necessary, even when the viewer likes their current service.</p><div class="insight-line orange-line"></div></article>
+    <article class="insight-card"><span class="insight-index">C / TRUST</span><div class="insight-icon purple-icon">◌</div><h3>The promise must hold</h3><p>Reviews supplied with the project mention playback, ads and membership frustrations. A broken promise can weaken perceived value.</p><div class="insight-line purple-line"></div></article>
+  </div>
+</section>
+
+<section class="evidence section-pad" id="evidence">
+  <div class="section-head reveal"><div><div class="eyebrow">SOURCE MATERIAL / 05</div><h2>Research is only as strong<br><em>as its proof.</em></h2></div><p>Project evidence supplied for this experience: an interview-session photo and review captures. Use the proof folder for the complete source trail.</p></div>
+  <div class="evidence-layout">
+    <div class="field-photo"><img src="assets/interview-session.jpg" alt="Team conducting a user interview at a table"><div class="photo-caption"><span>FIELDWORK / INTERVIEW SESSION</span><span>01</span></div></div>
+    <div class="review-stack">
+      <div class="review-heading"><span>REVIEW SNAPSHOTS</span><span>SUPPLIED PROJECT EVIDENCE</span></div>
+      <div class="review-row"><img src="assets/netflix-review-1.png" alt="Netflix review screenshot"><div><b>Netflix feedback</b><p>Review excerpts supplied with the research pack.</p></div><span class="review-arrow">↗</span></div>
+      <div class="review-row"><img src="assets/crunchyroll-review-1.png" alt="Crunchyroll review screenshot"><div><b>Crunchyroll feedback</b><p>Review excerpts supplied with the research pack.</p></div><span class="review-arrow">↗</span></div>
+      <div class="review-row"><img src="assets/crunchyroll-review-2.png" alt="Crunchyroll review screenshot"><div><b>Playback and membership</b><p>Additional review evidence for experience issues.</p></div><span class="review-arrow">↗</span></div>
+      <div class="review-row"><img src="assets/crunchyroll-review-3.png" alt="Crunchyroll review screenshot"><div><b>Service experience</b><p>Additional supplied user-review capture.</p></div><span class="review-arrow">↗</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="method section-pad" id="method">
+  <div class="method-panel reveal"><div><div class="eyebrow">THE RESEARCH STANDARD / 06</div><h2>Make every claim<br><em>traceable.</em></h2><p>Keep interview counts, direct quotes and review evidence separate. A review screenshot is not the same thing as an interview response. The comparison should show exactly where each insight came from.</p><a class="btn btn-outline" href="https://docs.google.com/spreadsheets/d/1dbR_llxoIBore5OYdywvxecZ2IEjryKi/edit?usp=sharing" target="_blank" rel="noopener">Open interview sheet ↗</a></div><div class="method-list"><div><b>01</b><span>Interview response</span><small>Who said it, and in what context?</small></div><div><b>02</b><span>Observed moment</span><small>What happened during the experience?</small></div><div><b>03</b><span>Review evidence</span><small>Which supplied review supports the claim?</small></div><div><b>04</b><span>Design opportunity</span><small>What change could address the friction?</small></div></div></div>
+</section>
+</main>
+<footer><a class="brand" href="#home"><span class="brand-mark">2S</span><span>TWO<span class="brand-light">STREAMS</span></span></a><span>NETFLIX × CRUNCHYROLL / USER EXPERIENCE STUDY</span><a href="#home">BACK TO TOP ↑</a></footer>
+<script src="app.js"></script>
+</body></html>
