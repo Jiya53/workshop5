@@ -1,135 +1,1026 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080910">
-<title>Two Streams — Netflix vs Crunchyroll</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Crunchyroll – Watch More for Free</title>
+<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    background:#0a0a0a;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:32px 20px 56px;
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ═══ PHONE SHELL ═══ */
+  .phone{
+    width:390px;
+    background:#060606;
+    border-radius:52px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:
+      0 0 0 1px #1c1c1c,
+      0 0 0 2px #111,
+      0 0 0 12px #141414,
+      0 0 0 13px #1f1f1f,
+      0 40px 100px rgba(0,0,0,.95),
+      0 12px 32px rgba(0,0,0,.7),
+      inset 0 1px 0 rgba(255,255,255,.04);
+    /* Side buttons */
+  }
+  .phone::before{
+    content:'';
+    position:absolute;
+    left:-4px; top:120px;
+    width:4px; height:36px;
+    background:#1a1a1a;
+    border-radius:3px 0 0 3px;
+    box-shadow:0 48px 0 #1a1a1a, 0 92px 0 #1a1a1a;
+  }
+  .phone::after{
+    content:'';
+    position:absolute;
+    right:-4px; top:150px;
+    width:4px; height:60px;
+    background:#1a1a1a;
+    border-radius:0 3px 3px 0;
+  }
+
+  /* Dynamic island */
+  .island{
+    position:absolute;
+    top:13px; left:50%;
+    transform:translateX(-50%);
+    width:126px; height:36px;
+    background:#000;
+    border-radius:20px;
+    z-index:100;
+    box-shadow:0 0 0 1px rgba(255,255,255,.06);
+  }
+  .island::before{
+    content:'';
+    position:absolute;
+    left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    width:10px; height:10px;
+    border-radius:50%;
+    background:#1a1a1a;
+    box-shadow:20px 0 0 #1a1a1a;
+  }
+
+  /* ═══ SCREEN ═══ */
+  .screen{
+    background:#060606;
+    min-height:844px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* ═══ STATUS BAR ═══ */
+  .statusbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:56px 28px 8px;
+  }
+  .s-time{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+  .s-icons{display:flex;align-items:center;gap:5px}
+
+  /* ═══ TOP NAV ═══ */
+  .topnav{
+    display:flex;align-items:center;
+    justify-content:space-between;
+    padding:4px 20px 12px;
+  }
+  .brand{display:flex;align-items:center;gap:9px}
+  .brandname{font-size:21px;font-weight:800;color:#fff;letter-spacing:-.6px}
+  .navright{display:flex;align-items:center;gap:12px}
+  .navright svg{width:22px;height:22px;fill:#ccc}
+  .avatar{
+    width:33px;height:33px;border-radius:50%;
+    background:linear-gradient(135deg,#F47521 0%,#c44e10 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:800;color:#fff;
+    box-shadow:0 2px 8px rgba(244,117,33,.4);
+  }
+
+  /* ═══ TABS ═══ */
+  .tabs{
+    display:flex;
+    padding:0 20px;
+    border-bottom:1px solid #161616;
+    gap:4px;
+  }
+  .tab{
+    padding:9px 12px 11px;
+    font-size:13.5px;font-weight:500;
+    color:#555;cursor:pointer;
+    position:relative;white-space:nowrap;
+    transition:color .2s;
+  }
+  .tab.on{color:#fff;font-weight:700}
+  .tab.on::after{
+    content:'';position:absolute;
+    bottom:-1px;left:0;right:0;
+    height:2px;background:#F47521;
+    border-radius:2px 2px 0 0;
+  }
+
+  /* ═══ SCROLL ═══ */
+  .scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+  .scroll::-webkit-scrollbar{display:none}
+
+  /* ═══ HERO ═══ */
+  .hero{
+    margin:12px 16px 0;
+    border-radius:16px;
+    overflow:hidden;
+    height:210px;
+    position:relative;
+    box-shadow:0 8px 32px rgba(0,0,0,.7);
+  }
+  .hero-canvas{position:absolute;inset:0;width:100%;height:100%}
+  .hero-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0.1) 40%,
+      rgba(0,0,0,0.85) 80%,
+      rgba(0,0,0,.97) 100%);
+  }
+  .hero-newep{
+    position:absolute;top:12px;left:12px;
+    background:#F47521;color:#fff;
+    font-size:10px;font-weight:800;
+    padding:4px 9px;border-radius:5px;
+    letter-spacing:.6px;text-transform:uppercase;
+    box-shadow:0 2px 8px rgba(244,117,33,.5);
+  }
+  .hero-info{
+    position:absolute;bottom:14px;left:16px;right:16px;
+  }
+  .hero-genre{
+    font-size:10.5px;font-weight:600;
+    color:#F47521;letter-spacing:.8px;text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .hero-title{
+    font-size:24px;font-weight:800;color:#fff;
+    letter-spacing:-.6px;line-height:1.1;margin-bottom:4px;
+  }
+  .hero-meta{font-size:11.5px;color:#999;margin-bottom:10px}
+  .hero-btns{display:flex;gap:8px;align-items:center}
+  .btn-play{
+    display:flex;align-items:center;gap:6px;
+    background:#F47521;color:#fff;
+    font-size:13px;font-weight:800;
+    padding:8px 18px;border-radius:8px;
+    border:none;cursor:pointer;
+    letter-spacing:-.1px;
+    box-shadow:0 4px 16px rgba(244,117,33,.45);
+  }
+  .btn-wl{
+    display:flex;align-items:center;gap:5px;
+    background:rgba(255,255,255,.1);color:#fff;
+    font-size:13px;font-weight:600;
+    padding:8px 14px;border-radius:8px;
+    border:1px solid rgba(255,255,255,.18);
+    cursor:pointer;backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+  }
+
+  /* ═══ SECTION HEADER ═══ */
+  .sec{padding:22px 20px 0}
+  .sec-title{
+    font-size:19px;font-weight:800;color:#fff;
+    letter-spacing:-.5px;margin-bottom:3px;
+  }
+  .sec-sub{font-size:12px;color:#555;margin-bottom:14px;display:flex;align-items:center;gap:0}
+  .sec-sub .hi{color:#888}
+  .sep{margin:0 6px;color:#333}
+
+  /* ═══ FREE BADGE ═══ */
+  .fbadge{
+    position:absolute;top:9px;left:9px;
+    background:#F47521;color:#fff;
+    font-size:9.5px;font-weight:800;
+    padding:3px 8px;border-radius:5px;
+    letter-spacing:.3px;z-index:3;
+    box-shadow:0 2px 8px rgba(244,117,33,.5);
+    text-transform:uppercase;
+  }
+
+  /* ═══ ANIME CARD ROW ═══ */
+  .cardrow{
+    display:flex;gap:11px;
+    overflow-x:auto;
+    padding:0 20px 2px;
+    scrollbar-width:none;
+  }
+  .cardrow::-webkit-scrollbar{display:none}
+
+  .acard{flex:0 0 148px;cursor:pointer}
+  .acard.clip{flex:0 0 76px;overflow:hidden}
+
+  .athumb{
+    width:100%;height:204px;
+    border-radius:12px;overflow:hidden;
+    position:relative;margin-bottom:9px;
+    box-shadow:0 6px 20px rgba(0,0,0,.7);
+  }
+  .athumb svg{position:absolute;inset:0;width:100%;height:100%}
+
+  .acard.clip .athumb{width:148px} /* Full width, outer clips */
+
+  .acard-title{font-size:13px;font-weight:700;color:#e8e8e8;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .acard-meta{font-size:11px;color:#555}
+
+  /* ═══ CTA BUTTON ═══ */
+  .cta-wrap{padding:16px 20px 0}
+  .cta{
+    width:100%;
+    background:linear-gradient(135deg,#F47521 0%,#e06010 100%);
+    color:#fff;font-size:14.5px;font-weight:800;
+    padding:15px;border-radius:12px;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    letter-spacing:-.2px;
+    box-shadow:0 6px 24px rgba(244,117,33,.4), 0 2px 8px rgba(244,117,33,.2);
+  }
+
+  /* ═══ PREMIUM CARD ═══ */
+  .prem{
+    margin:16px 20px 0;
+    background:linear-gradient(135deg,#111 0%,#0e0e0e 100%);
+    border:1px solid #222;
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex;align-items:center;
+    justify-content:space-between;
+    position:relative;overflow:hidden;
+  }
+  .prem::before{
+    content:'';position:absolute;
+    top:-30px;right:-20px;
+    width:120px;height:120px;
+    background:radial-gradient(circle,rgba(244,117,33,.08) 0%,transparent 70%);
+    border-radius:50%;
+  }
+  .prem-left{display:flex;align-items:center;gap:11px;position:relative}
+  .prem-icon{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg,#2a1800,#1a1000);
+    border:1px solid #2d2000;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;flex-shrink:0;
+  }
+  .prem-name{font-size:14px;font-weight:800;color:#fff;margin-bottom:2px}
+  .prem-desc{font-size:11px;color:#555}
+  .prem-desc span{color:#888}
+  .sub-btn{
+    background:transparent;color:#F47521;
+    font-size:12.5px;font-weight:800;
+    padding:8px 15px;border-radius:8px;
+    border:1.5px solid #F47521;cursor:pointer;
+    white-space:nowrap;position:relative;
+    letter-spacing:-.1px;
+    flex-shrink:0;
+  }
+
+  /* ═══ COMING SOON ═══ */
+  .comrow{
+    display:flex;gap:10px;
+    overflow-x:auto;padding:0 20px 2px;
+    scrollbar-width:none;
+  }
+  .comrow::-webkit-scrollbar{display:none}
+
+  .comcard{flex:0 0 110px;cursor:pointer}
+  .comcard.clip2{flex:0 0 55px;overflow:hidden}
+
+  .comthumb{
+    width:110px;height:154px;
+    border-radius:12px;overflow:hidden;
+    position:relative;margin-bottom:8px;
+    box-shadow:0 4px 16px rgba(0,0,0,.7);
+  }
+  .comcard.clip2 .comthumb{width:110px}
+
+  .comthumb-inner{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:7px;
+  }
+  .com-lock{
+    width:28px;height:28px;
+    background:rgba(255,255,255,.08);
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .com-pill{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.1);
+    color:#666;font-size:9px;font-weight:700;
+    padding:3px 8px;border-radius:4px;
+    letter-spacing:.4px;text-transform:uppercase;
+  }
+  .com-title{font-size:11.5px;font-weight:600;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
+  .com-sub{font-size:10px;color:#333;margin-top:1px}
+
+  /* ═══ BOTTOM NAV ═══ */
+  .botnav{
+    border-top:1px solid #111;
+    display:flex;justify-content:space-around;
+    padding:11px 0 32px;
+    background:#060606;
+    flex-shrink:0;
+  }
+  .bni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+  .bni svg{width:22px;height:22px}
+  .bni span{font-size:9.5px;font-weight:500;color:#444}
+  .bni.on svg{fill:#F47521}
+  .bni.on span{color:#F47521;font-weight:700}
+  .bni:not(.on) svg{fill:#444}
+
+  .concept{
+    text-align:center;font-size:11px;font-style:italic;
+    color:#282828;padding:5px 0 10px;flex-shrink:0;
+  }
+
+  /* Thumb-rating badge */
+  .rating-pill{
+    position:absolute;bottom:9px;right:9px;
+    background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.1);
+    color:#ccc;font-size:9px;font-weight:700;
+    padding:2px 6px;border-radius:4px;
+    display:flex;align-items:center;gap:3px;
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  }
+</style>
 </head>
 <body>
-<div class="noise"></div>
-<header class="topbar">
-  <a class="brand" href="#home"><span class="brand-mark">2S</span><span>TWO<span class="brand-light">STREAMS</span></span></a>
-  <nav id="nav"><a href="#compare">Compare</a><a href="#findings">Interview findings</a><a href="#evidence">Evidence</a><a href="#method">Method</a></nav>
-  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
-  <a class="top-cta" href="#findings">Explore the research <span>↗</span></a>
-</header>
+<div class="phone">
+  <div class="island"></div>
+  <div class="screen">
 
-<main>
-<section class="hero" id="home">
-  <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/comparison-art.png">
-    <source src="assets/original-cinematic-loop.mp4" type="video/mp4">
-  </video>
-  <div class="hero-fallback"></div>
-  <div class="hero-shade"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content reveal">
-    <div class="eyebrow"><span class="live-dot"></span> STREAMING EXPERIENCE STUDY <span class="eyebrow-line"></span> 2026</div>
-    <h1>ONE WORLD.<br><span class="headline-accent">TWO STREAMING</span><br>GIANTS.</h1>
-    <p class="hero-copy">Netflix or Crunchyroll? Explore what viewers really think about their streaming experience.</p>
-    <div class="hero-actions">
-      <a class="btn btn-netflix" href="#netflix">Explore Netflix <span>↗</span></a>
-      <a class="btn btn-crunchy" href="#crunchyroll">Explore Crunchyroll <span>↗</span></a>
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <span class="s-time">9:41</span>
+      <div class="s-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white">
+          <rect x="0" y="8" width="3" height="4" rx=".6"/>
+          <rect x="4.5" y="5.5" width="3" height="6.5" rx=".6" opacity=".9"/>
+          <rect x="9" y="3" width="3" height="9" rx=".6" opacity=".9"/>
+          <rect x="13.5" y=".5" width="3" height="11.5" rx=".6" opacity=".9"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <path d="M8 9.2a1.4 1.4 0 100 2.8 1.4 1.4 0 000-2.8z" fill="white"/>
+          <path d="M3.1 6.7a7 7 0 019.8 0" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <path d="M.4 4a11.4 11.4 0 0115.2 0" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+        <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
+          <rect x=".6" y=".6" width="21" height="11.8" rx="2.8" stroke="white" stroke-width="1.2"/>
+          <rect x="22" y="4.2" width="2.5" height="4.6" rx="1.2" fill="white" opacity=".7"/>
+          <rect x="2" y="2.2" width="16" height="8.6" rx="1.6" fill="white"/>
+        </svg>
+      </div>
     </div>
-    <div class="hero-footnote"><span>INDEPENDENT USER RESEARCH</span><span>SCROLL TO DISCOVER ↓</span></div>
-  </div>
-  <div class="hero-side-label">CONTENT × CULTURE × EXPERIENCE</div>
-  <div class="hero-index"><b>01</b><span>—</span> THE BIG PICTURE</div>
-</section>
 
-<section class="intro section-pad" id="compare">
-  <div class="section-head reveal"><div><div class="eyebrow">THE BIG PICTURE / 01</div><h2>Two platforms.<br><em>Two different promises.</em></h2></div><p>One is built for broad entertainment. The other puts anime at the centre. The real comparison begins when a viewer presses play.</p></div>
-  <div class="platform-stage">
-    <article class="platform-card netflix-card tilt-card" id="netflix">
-      <div class="platform-top"><span class="platform-kicker">01 / GENERAL ENTERTAINMENT</span><span class="platform-symbol netflix-symbol">N</span></div>
-      <div class="platform-title">NETFLIX</div><div class="platform-subtitle">Stories for every kind of night.</div>
-      <div class="platform-tags"><span>FILMS</span><span>SERIES</span><span>DOCUMENTARIES</span><span>ORIGINALS</span></div>
-      <div class="platform-bottom"><span class="platform-color-dot red-dot"></span><span>THE BROAD-CATALOGUE EXPERIENCE</span><span class="arrow">↗</span></div>
-    </article>
-    <div class="versus"><span>VS</span><i></i><small>THE VIEWER DECIDES</small></div>
-    <article class="platform-card crunchy-card tilt-card" id="crunchyroll">
-      <div class="platform-top"><span class="platform-kicker">02 / ANIME-FIRST STREAMING</span><span class="platform-symbol crunchy-symbol">◉</span></div>
-      <div class="platform-title">CRUNCHYROLL</div><div class="platform-subtitle">A world built around anime.</div>
-      <div class="platform-tags"><span>ANIME</span><span>SIMULCASTS</span><span>DISCOVERY</span><span>COMMUNITY</span></div>
-      <div class="platform-bottom"><span class="platform-color-dot orange-dot"></span><span>THE SPECIALIST-CATALOGUE EXPERIENCE</span><span class="arrow">↗</span></div>
-    </article>
-  </div>
-  <div class="stage-note"><span>INTERACTIVE COMPARISON</span><span>Move your pointer over either panel</span></div>
-</section>
-
-<section class="comparison section-pad">
-  <div class="section-head reveal"><div><div class="eyebrow">THE EXPERIENCE / 02</div><h2>Where the experiences<br><em>meet — and diverge.</em></h2></div><p>Explore the dimensions that shape the decision to stay, subscribe, or switch.</p></div>
-  <div class="comparison-grid">
-    <button class="compare-tile active" data-topic="catalogue"><span class="tile-no">01</span><span class="tile-title">Content variety</span><span class="tile-desc">Broad catalogue vs anime depth</span><span class="tile-arrow">↗</span></button>
-    <button class="compare-tile" data-topic="availability"><span class="tile-no">02</span><span class="tile-title">Anime availability</span><span class="tile-desc">Regional access and catalogue gaps</span><span class="tile-arrow">↗</span></button>
-    <button class="compare-tile" data-topic="subscription"><span class="tile-no">03</span><span class="tile-title">Subscription experience</span><span class="tile-desc">Value, tiers and expectations</span><span class="tile-arrow">↗</span></button>
-    <button class="compare-tile" data-topic="interface"><span class="tile-no">04</span><span class="tile-title">User interface</span><span class="tile-desc">Navigation and playback flow</span><span class="tile-arrow">↗</span></button>
-    <button class="compare-tile" data-topic="recommendations"><span class="tile-no">05</span><span class="tile-title">Recommendations</span><span class="tile-desc">Finding the next thing to watch</span><span class="tile-arrow">↗</span></button>
-    <button class="compare-tile" data-topic="switching"><span class="tile-no">06</span><span class="tile-title">Reasons for switching</span><span class="tile-desc">The moment loyalty changes</span><span class="tile-arrow">↗</span></button>
-  </div>
-  <div class="comparison-detail reveal">
-    <div class="detail-visual"><div class="detail-orbit orbit-one"></div><div class="detail-orbit orbit-two"></div><div class="detail-center" id="detailGlyph">✦</div><div class="detail-label">VIEWER LENS</div></div>
-    <div class="detail-copy"><div class="eyebrow" id="detailEyebrow">DIMENSION 01</div><h3 id="detailTitle">Content variety</h3><p id="detailText">Netflix is positioned as a broad entertainment destination, while Crunchyroll focuses on anime discovery and depth. Which catalogue feels more valuable depends on what the viewer wants to watch.</p><div class="detail-pills" id="detailPills"><span>CATALOGUE FIT</span><span>VIEWING HABITS</span><span>DISCOVERY</span></div></div>
-  </div>
-</section>
-
-<section class="findings section-pad" id="findings">
-  <div class="section-head reveal"><div><div class="eyebrow">VOICE OF THE VIEWER / 03</div><h2>REAL USERS.<br><em>REAL OPINIONS.</em></h2></div><p>Interview evidence belongs at the centre of this comparison. Import the collected sheet to calculate real counts here—no placeholder statistics are presented as findings.</p></div>
-  <div class="data-console">
-    <div class="console-top"><div><span class="live-dot"></span> INTERVIEW DATA CONSOLE</div><span class="console-status" id="dataStatus">WAITING FOR DATA</span></div>
-    <div class="metric-row">
-      <div class="metric"><span class="metric-label">TOTAL RESPONSES</span><strong id="totalCount">—</strong><small>From imported interview rows</small></div>
-      <div class="metric"><span class="metric-label">NETFLIX USERS</span><strong id="netflixCount">—</strong><small>Detected from your sheet</small></div>
-      <div class="metric"><span class="metric-label">CRUNCHYROLL USERS</span><strong id="crunchyCount">—</strong><small>Detected from your sheet</small></div>
-      <div class="metric"><span class="metric-label">SWITCHED USERS</span><strong id="switchCount">—</strong><small>Detected from your sheet</small></div>
+    <!-- TOP NAV -->
+    <div class="topnav">
+      <div class="brand">
+        <svg width="33" height="33" viewBox="0 0 33 33" fill="none">
+          <circle cx="16.5" cy="16.5" r="16.5" fill="#F47521"/>
+          <circle cx="16.5" cy="16.5" r="10.5" fill="#060606"/>
+          <circle cx="16.5" cy="16.5" r="6.2" fill="#F47521"/>
+          <circle cx="21.5" cy="10" r="4.5" fill="#F47521"/>
+          <circle cx="21.5" cy="10" r="2.1" fill="#060606"/>
+        </svg>
+        <span class="brandname">Crunchyroll</span>
+      </div>
+      <div class="navright">
+        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7v3.17l-1.7 1.7c-.19.18-.3.44-.3.7V16a1 1 0 001 1h4.17c.41 1.17 1.52 2 2.83 2s2.42-.83 2.83-2H19a1 1 0 001-1v-1.42c0-.27-.11-.52-.3-.71L18 13.17V9a7 7 0 00-6-6.93V2z"/></svg>
+        <div class="avatar">K</div>
+      </div>
     </div>
-    <div class="data-empty" id="dataEmpty">
-      <div class="empty-icon">↥</div><h3>Your evidence. Your numbers.</h3>
-      <p>Upload a CSV export of the Google Sheet to populate response totals, platform counts, switching patterns and reason summaries.</p>
-      <label class="upload-btn" for="csvInput">Import interview CSV <span>＋</span></label>
-      <input type="file" id="csvInput" accept=".csv,text/csv" hidden>
-      <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1dbR_llxoIBore5OYdywvxecZ2IEjryKi/edit?usp=sharing" target="_blank" rel="noopener">Open the source Google Sheet ↗</a>
-      <p class="micro-note">Google Sheet access could not be verified automatically in this build. Export it as CSV from Google Sheets, then import it here.</p>
-    </div>
-    <div class="data-loaded" id="dataLoaded" hidden>
-      <div class="loaded-head"><div><span class="eyebrow">LIVE FROM YOUR CSV</span><h3 id="loadedTitle">Interview summary</h3></div><button class="text-button" id="resetData">Remove imported data ×</button></div>
-      <div class="insight-grid"><div class="insight-box"><span>PLATFORM SPLIT</span><div class="bar-chart" id="platformChart"></div></div><div class="insight-box"><span>STAY / SWITCH PATTERN</span><div class="bar-chart" id="switchChart"></div></div><div class="insight-box"><span>REASONS MENTIONED</span><div class="reason-list" id="reasonList"></div></div></div>
-      <p class="micro-note" id="csvNote"></p>
-    </div>
-  </div>
-  <div class="quote-strip"><div class="quote-mark">“</div><div><p>“I switched to Crunchyroll, where I could find a much larger collection of One Piece episodes.”</p><span>INTERVIEW NOTE SHARED WITH THE PROJECT</span></div><div class="quote-tag">CATALOGUE GAP → SWITCH</div></div>
-</section>
 
-<section class="insights section-pad">
-  <div class="section-head reveal"><div><div class="eyebrow">WHAT THE EVIDENCE POINTS TO / 04</div><h2>What makes a viewer<br><em>stay or move on?</em></h2></div><p>These are research themes to test against the full interview dataset, not ranked findings or population-wide claims.</p></div>
-  <div class="insight-cards">
-    <article class="insight-card"><span class="insight-index">A / STAY</span><div class="insight-icon red-icon">▤</div><h3>Content that fits the habit</h3><p>A broad mix can serve viewers who switch between films, series and other genres. A specialist library can matter more to anime-first viewers.</p><div class="insight-line red-line"></div></article>
-    <article class="insight-card"><span class="insight-index">B / SWITCH</span><div class="insight-icon orange-icon">↗</div><h3>A title they cannot find</h3><p>Regional catalogue gaps can make a second platform feel necessary, even when the viewer likes their current service.</p><div class="insight-line orange-line"></div></article>
-    <article class="insight-card"><span class="insight-index">C / TRUST</span><div class="insight-icon purple-icon">◌</div><h3>The promise must hold</h3><p>Reviews supplied with the project mention playback, ads and membership frustrations. A broken promise can weaken perceived value.</p><div class="insight-line purple-line"></div></article>
-  </div>
-</section>
-
-<section class="evidence section-pad" id="evidence">
-  <div class="section-head reveal"><div><div class="eyebrow">SOURCE MATERIAL / 05</div><h2>Research is only as strong<br><em>as its proof.</em></h2></div><p>Project evidence supplied for this experience: an interview-session photo and review captures. Use the proof folder for the complete source trail.</p></div>
-  <div class="evidence-layout">
-    <div class="field-photo"><img src="assets/interview-session.jpg" alt="Team conducting a user interview at a table"><div class="photo-caption"><span>FIELDWORK / INTERVIEW SESSION</span><span>01</span></div></div>
-    <div class="review-stack">
-      <div class="review-heading"><span>REVIEW SNAPSHOTS</span><span>SUPPLIED PROJECT EVIDENCE</span></div>
-      <div class="review-row"><img src="assets/netflix-review-1.png" alt="Netflix review screenshot"><div><b>Netflix feedback</b><p>Review excerpts supplied with the research pack.</p></div><span class="review-arrow">↗</span></div>
-      <div class="review-row"><img src="assets/crunchyroll-review-1.png" alt="Crunchyroll review screenshot"><div><b>Crunchyroll feedback</b><p>Review excerpts supplied with the research pack.</p></div><span class="review-arrow">↗</span></div>
-      <div class="review-row"><img src="assets/crunchyroll-review-2.png" alt="Crunchyroll review screenshot"><div><b>Playback and membership</b><p>Additional review evidence for experience issues.</p></div><span class="review-arrow">↗</span></div>
-      <div class="review-row"><img src="assets/crunchyroll-review-3.png" alt="Crunchyroll review screenshot"><div><b>Service experience</b><p>Additional supplied user-review capture.</p></div><span class="review-arrow">↗</span></div>
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab on">Home</div>
+      <div class="tab">Anime</div>
+      <div class="tab">Manga</div>
+      <div class="tab">Games</div>
     </div>
-  </div>
-</section>
 
-<section class="method section-pad" id="method">
-  <div class="method-panel reveal"><div><div class="eyebrow">THE RESEARCH STANDARD / 06</div><h2>Make every claim<br><em>traceable.</em></h2><p>Keep interview counts, direct quotes and review evidence separate. A review screenshot is not the same thing as an interview response. The comparison should show exactly where each insight came from.</p><a class="btn btn-outline" href="https://docs.google.com/spreadsheets/d/1dbR_llxoIBore5OYdywvxecZ2IEjryKi/edit?usp=sharing" target="_blank" rel="noopener">Open interview sheet ↗</a></div><div class="method-list"><div><b>01</b><span>Interview response</span><small>Who said it, and in what context?</small></div><div><b>02</b><span>Observed moment</span><small>What happened during the experience?</small></div><div><b>03</b><span>Review evidence</span><small>Which supplied review supports the claim?</small></div><div><b>04</b><span>Design opportunity</span><small>What change could address the friction?</small></div></div></div>
-</section>
-</main>
-<footer><a class="brand" href="#home"><span class="brand-mark">2S</span><span>TWO<span class="brand-light">STREAMS</span></span></a><span>NETFLIX × CRUNCHYROLL / USER EXPERIENCE STUDY</span><a href="#home">BACK TO TOP ↑</a></footer>
-<script src="app.js"></script>
-</body></html>
+    <!-- SCROLL AREA -->
+    <div class="scroll">
+
+      <!-- ═══ HERO ═══ -->
+      <div class="hero">
+        <svg class="hero-canvas" viewBox="0 0 390 210" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="hSky" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#05050f"/>
+              <stop offset="45%" stop-color="#100c24"/>
+              <stop offset="100%" stop-color="#200a05"/>
+            </linearGradient>
+            <radialGradient id="hMoon" cx="75%" cy="20%" r="30%">
+              <stop offset="0%" stop-color="#bbe" stop-opacity=".25"/>
+              <stop offset="100%" stop-color="#aab" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="hFire" cx="40%" cy="80%" r="45%">
+              <stop offset="0%" stop-color="#F47521" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#F47521" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="hFog" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#060606" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#060606" stop-opacity="1"/>
+            </linearGradient>
+          </defs>
+
+          <rect width="390" height="210" fill="url(#hSky)"/>
+          <rect width="390" height="210" fill="url(#hMoon)"/>
+          <rect width="390" height="210" fill="url(#hFire)"/>
+
+          <!-- Stars -->
+          <g fill="white">
+            <circle cx="30" cy="18" r="1.2" opacity=".7"/>
+            <circle cx="85" cy="12" r=".8" opacity=".5"/>
+            <circle cx="145" cy="22" r="1" opacity=".6"/>
+            <circle cx="210" cy="8" r=".7" opacity=".4"/>
+            <circle cx="265" cy="19" r="1.3" opacity=".8"/>
+            <circle cx="320" cy="11" r=".9" opacity=".5"/>
+            <circle cx="370" cy="16" r="1.1" opacity=".6"/>
+            <circle cx="55" cy="35" r=".6" opacity=".35"/>
+            <circle cx="175" cy="40" r=".7" opacity=".3"/>
+            <circle cx="340" cy="30" r=".8" opacity=".4"/>
+          </g>
+
+          <!-- Moon disc -->
+          <circle cx="295" cy="38" r="28" fill="#c8d4f4" opacity=".07"/>
+          <circle cx="295" cy="38" r="20" fill="#d0dcff" opacity=".09"/>
+          <circle cx="295" cy="38" r="13" fill="#dde4ff" opacity=".06"/>
+
+          <!-- Mountain layers -->
+          <path d="M0,210 L0,145 L45,80 L90,120 L140,55 L185,100 L230,65 L275,105 L315,70 L355,95 L390,72 L390,210 Z" fill="#080810" opacity=".95"/>
+          <path d="M0,210 L0,160 L60,110 L110,145 L165,95 L215,130 L260,100 L305,130 L345,108 L390,120 L390,210 Z" fill="#040408"/>
+          <!-- Ruined walls -->
+          <rect x="130" y="140" width="130" height="70" fill="#050508"/>
+          <rect x="145" y="128" width="20" height="20" fill="#080810"/>
+          <rect x="225" y="125" width="22" height="23" fill="#080810"/>
+          <rect x="185" y="118" width="20" height="30" fill="#0a0a14"/>
+
+          <!-- Warrior silhouette (more detailed) -->
+          <g transform="translate(192,55)">
+            <!-- Cape/cloak billowing -->
+            <path d="M-24,65 Q-40,80 -38,110 L-18,110 L-10,65 Z" fill="#0d0d0d"/>
+            <path d="M24,65 Q42,78 40,110 L20,110 L10,65 Z" fill="#0a0a0a"/>
+            <!-- Body -->
+            <rect x="-10" y="42" width="20" height="45" rx="4" fill="#0d0d0d"/>
+            <!-- Belt detail -->
+            <rect x="-10" y="66" width="20" height="4" rx="1" fill="#181818"/>
+            <!-- Head -->
+            <ellipse cx="0" cy="30" rx="13" ry="13.5" fill="#0d0d0d"/>
+            <!-- Hair (wild) -->
+            <path d="M-13,22 Q-22,4 -10,8 Q-5,0 2,5 Q9,0 14,8 Q22,5 13,22" fill="#111"/>
+            <!-- Right arm — sword raised overhead -->
+            <line x1="8" y1="52" x2="28" y2="22" stroke="#0d0d0d" stroke-width="10" stroke-linecap="round"/>
+            <!-- Sword -->
+            <line x1="27" y1="22" x2="40" y2="-18" stroke="#c0ccee" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+            <!-- Sword crossguard -->
+            <line x1="21" y1="20" x2="34" y2="17" stroke="#8899bb" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+            <!-- Sword glow -->
+            <line x1="27" y1="22" x2="40" y2="-18" stroke="#aabcee" stroke-width="5" stroke-linecap="round" opacity=".1"/>
+            <!-- Left arm -->
+            <line x1="-8" y1="52" x2="-28" y2="75" stroke="#0d0d0d" stroke-width="10" stroke-linecap="round"/>
+            <!-- Left hand holding sheath -->
+            <ellipse cx="-28" cy="77" rx="5" ry="8" fill="#111" transform="rotate(-20,-28,77)"/>
+            <!-- Legs -->
+            <rect x="-9" y="86" width="8" height="28" rx="4" fill="#0a0a0a"/>
+            <rect x="1" y="86" width="8" height="26" rx="4" fill="#0a0a0a"/>
+            <!-- Boot detail -->
+            <rect x="-10" y="108" width="10" height="6" rx="2" fill="#111"/>
+            <rect x="0" y="106" width="10" height="6" rx="2" fill="#111"/>
+          </g>
+
+          <!-- Atmospheric fog at bottom -->
+          <rect x="0" y="130" width="390" height="80" fill="url(#hFog)"/>
+
+          <!-- Ember particles -->
+          <g fill="#F47521">
+            <circle cx="80" cy="140" r="1.5" opacity=".3"/>
+            <circle cx="310" cy="120" r="1" opacity=".2"/>
+            <circle cx="160" cy="155" r="1.2" opacity=".25"/>
+            <circle cx="260" cy="148" r=".8" opacity=".2"/>
+          </g>
+        </svg>
+
+        <div class="hero-overlay"></div>
+        <div class="hero-newep">New Episodes</div>
+        <div class="hero-info">
+          <div class="hero-genre">Action · Dark Fantasy</div>
+          <div class="hero-title">Demon Slayer</div>
+          <div class="hero-meta">1080p · Dubbed &amp; Subbed · 50+ Episodes</div>
+          <div class="hero-btns">
+            <button class="btn-play">
+              <svg width="11" height="13" viewBox="0 0 11 13"><polygon points="0,0 11,6.5 0,13" fill="white"/></svg>
+              Play Now
+            </button>
+            <button class="btn-wl">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+              Watchlist
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ WATCH MORE FOR FREE ═══ -->
+      <div class="sec">
+        <div class="sec-title">Watch More for Free</div>
+        <div class="sec-sub">
+          <span class="hi">No subscription required</span>
+          <span class="sep">·</span>
+          <span class="hi">Ad-free selection</span>
+        </div>
+      </div>
+
+      <div class="cardrow">
+
+        <!-- AoT -->
+        <div class="acard">
+          <div class="athumb">
+            <svg viewBox="0 0 148 204" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="aot1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#120500"/>
+                  <stop offset="50%" stop-color="#1e0a00"/>
+                  <stop offset="100%" stop-color="#0a0500"/>
+                </linearGradient>
+                <radialGradient id="aotSun" cx="50%" cy="30%" r="40%">
+                  <stop offset="0%" stop-color="#F47521" stop-opacity=".25"/>
+                  <stop offset="100%" stop-color="#F47521" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="aotFog" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="60%" stop-color="#120500" stop-opacity="0"/>
+                  <stop offset="100%" stop-color="#0a0500" stop-opacity="1"/>
+                </linearGradient>
+              </defs>
+              <rect width="148" height="204" fill="url(#aot1)"/>
+              <ellipse cx="74" cy="58" rx="55" ry="40" fill="url(#aotSun)"/>
+
+              <!-- Reddish sky streaks -->
+              <path d="M0,40 Q74,20 148,45" stroke="#F47521" stroke-width=".8" fill="none" opacity=".15"/>
+              <path d="M0,55 Q74,32 148,58" stroke="#F47521" stroke-width=".6" fill="none" opacity=".1"/>
+
+              <!-- Wall architecture -->
+              <rect x="0" y="130" width="148" height="74" fill="#0a0808"/>
+              <rect x="15" y="115" width="118" height="25" fill="#0d0a0a"/>
+              <rect x="30" y="102" width="88" height="20" fill="#100c0c"/>
+              <rect x="45" y="90" width="58" height="18" fill="#120e0e"/>
+              <!-- Battlements -->
+              <rect x="15" y="108" width="8" height="12" rx="1" fill="#0a0808"/>
+              <rect x="27" y="108" width="8" height="12" rx="1" fill="#0a0808"/>
+              <rect x="118" y="108" width="8" height="12" rx="1" fill="#0a0808"/>
+              <rect x="106" y="108" width="8" height="12" rx="1" fill="#0a0808"/>
+              <rect x="45" y="93" width="6" height="10" rx="1" fill="#0d0a0a"/>
+              <rect x="55" y="93" width="6" height="10" rx="1" fill="#0d0a0a"/>
+              <rect x="90" y="93" width="6" height="10" rx="1" fill="#0d0a0a"/>
+
+              <!-- ODM Wire -->
+              <path d="M74,70 Q110,30 148,15" stroke="#999" stroke-width=".8" fill="none" opacity=".3"/>
+              <path d="M74,70 Q40,35 10,10" stroke="#999" stroke-width=".6" fill="none" opacity=".2"/>
+
+              <!-- Warrior silhouette -->
+              <g transform="translate(74,72)">
+                <!-- Cape -->
+                <path d="M-10,8 Q-25,30 -20,55 L-5,55 L0,10 Z" fill="#141010"/>
+                <path d="M10,8 Q25,28 20,55 L5,55 L0,10 Z" fill="#111"/>
+                <!-- Body -->
+                <rect x="-7" y="5" width="14" height="30" rx="3" fill="#141010"/>
+                <!-- ODM harness lines -->
+                <path d="M-7,10 L-15,25 M7,10 L15,25" stroke="#332" stroke-width="1.2" fill="none" opacity=".6"/>
+                <!-- Head -->
+                <ellipse cx="0" cy="0" rx="9.5" ry="10" fill="#141010"/>
+                <!-- Hair -->
+                <path d="M-9,-6 Q-15,-20 -6,-16 Q-2,-24 4,-18 Q10,-22 10,-6" fill="#1a1414"/>
+                <!-- Eyes glow faintly -->
+                <ellipse cx="-3" cy="1" rx="2.5" ry="2" fill="#c0a080" opacity=".5"/>
+                <ellipse cx="3" cy="1" rx="2.5" ry="2" fill="#c0a080" opacity=".5"/>
+                <!-- Blades crossed -->
+                <line x1="-6" y1="-5" x2="-20" y2="-25" stroke="#b0b8cc" stroke-width="1.8" opacity=".7"/>
+                <line x1="6" y1="-5" x2="20" y2="-25" stroke="#b0b8cc" stroke-width="1.8" opacity=".7"/>
+                <!-- Arms -->
+                <line x1="-6" y1="8" x2="-20" y2="-5" stroke="#141010" stroke-width="8" stroke-linecap="round"/>
+                <line x1="6" y1="8" x2="20" y2="-5" stroke="#141010" stroke-width="8" stroke-linecap="round"/>
+                <!-- Legs -->
+                <rect x="-6" y="34" width="5.5" height="18" rx="2.5" fill="#111"/>
+                <rect x="1" y="34" width="5.5" height="17" rx="2.5" fill="#111"/>
+              </g>
+
+              <!-- Large titan hand emerging from side -->
+              <path d="M-5,100 Q15,70 38,88 Q35,120 28,145 L0,145 Z" fill="#1a0e0a" opacity=".85"/>
+              <!-- Fingers -->
+              <path d="M5,88 Q20,60 34,80" fill="#1e1208" opacity=".6"/>
+              <path d="M18,80 Q35,50 42,74" fill="#1e1208" opacity=".5"/>
+              <path d="M30,74 Q48,46 50,70" fill="#1a1008" opacity=".4"/>
+
+              <rect x="0" y="150" width="148" height="54" fill="url(#aotFog)"/>
+            </svg>
+
+            <div class="fbadge">Free to Watch</div>
+            <div class="rating-pill">⭐ 9.0</div>
+          </div>
+          <div class="acard-title">Attack on Titan</div>
+          <div class="acard-meta">Ep 1–12 Free · Season 1</div>
+        </div>
+
+        <!-- MHA -->
+        <div class="acard">
+          <div class="athumb">
+            <svg viewBox="0 0 148 204" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="mha1" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#05030f"/>
+                  <stop offset="55%" stop-color="#0a051a"/>
+                  <stop offset="100%" stop-color="#150520"/>
+                </linearGradient>
+                <radialGradient id="mhaAura" cx="50%" cy="55%" r="50%">
+                  <stop offset="0%" stop-color="#2255ff" stop-opacity=".25"/>
+                  <stop offset="70%" stop-color="#1133cc" stop-opacity=".08"/>
+                  <stop offset="100%" stop-color="#1133cc" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="mhaRed" cx="50%" cy="55%" r="40%">
+                  <stop offset="0%" stop-color="#cc0000" stop-opacity=".15"/>
+                  <stop offset="100%" stop-color="#cc0000" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="148" height="204" fill="url(#mha1)"/>
+              <ellipse cx="74" cy="115" rx="68" ry="70" fill="url(#mhaAura)"/>
+              <ellipse cx="74" cy="115" rx="50" ry="55" fill="url(#mhaRed)"/>
+
+              <!-- Background city silhouette -->
+              <g fill="#07050f" opacity=".8">
+                <rect x="0" y="155" width="20" height="49"/>
+                <rect x="5" y="140" width="10" height="20"/>
+                <rect x="20" y="150" width="15" height="54"/>
+                <rect x="40" y="160" width="10" height="44"/>
+                <rect x="55" y="148" width="8" height="56"/>
+                <rect x="100" y="155" width="14" height="49"/>
+                <rect x="118" y="143" width="10" height="61"/>
+                <rect x="130" y="158" width="18" height="46"/>
+              </g>
+
+              <!-- Lightning bolts from above -->
+              <path d="M55,0 L62,30 L55,30 L64,60" stroke="#3366ff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
+              <path d="M50,0 L56,28 L50,28 L58,56" stroke="#5588ff" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".3"/>
+              <path d="M95,5 L100,28 L94,28 L102,52" stroke="#3366ff" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".35"/>
+              <!-- Electric sparks -->
+              <g stroke="#6699ff" stroke-width=".8" fill="none" opacity=".4">
+                <line x1="30" y1="45" x2="38" y2="38"/>
+                <line x1="38" y1="38" x2="34" y2="30"/>
+                <line x1="110" y1="52" x2="120" y2="44"/>
+                <line x1="120" y1="44" x2="116" y2="36"/>
+              </g>
+
+              <!-- Character body -->
+              <g transform="translate(74,105)">
+                <!-- Legs -->
+                <rect x="-10" y="45" width="9" height="30" rx="3.5" fill="#111a3e"/>
+                <rect x="1" y="45" width="9" height="28" rx="3.5" fill="#111a3e"/>
+                <!-- Boots -->
+                <rect x="-11" y="70" width="11" height="8" rx="2" fill="#0a0a1a"/>
+                <rect x="0" y="68" width="11" height="8" rx="2" fill="#0a0a1a"/>
+
+                <!-- Body / hero suit -->
+                <rect x="-14" y="5" width="28" height="42" rx="4" fill="#111a3e"/>
+                <!-- Suit details - chest lines -->
+                <rect x="-14" y="20" width="28" height="2" rx="1" fill="#1a2550" opacity=".8"/>
+                <!-- Belt -->
+                <rect x="-14" y="43" width="28" height="5" rx="1" fill="#0d1230"/>
+
+                <!-- Arms raised / action pose -->
+                <rect x="-24" y="2" width="12" height="28" rx="4" fill="#111a3e" transform="rotate(-25,-18,16)"/>
+                <rect x="12" y="2" width="12" height="28" rx="4" fill="#111a3e" transform="rotate(25,18,16)"/>
+
+                <!-- Fists with blue energy -->
+                <ellipse cx="-30" cy="-8" rx="9" ry="8" fill="#1a3080"/>
+                <ellipse cx="-30" cy="-8" rx="6" ry="5.5" fill="#2244aa"/>
+                <ellipse cx="30" cy="-8" rx="9" ry="8" fill="#1a3080"/>
+                <ellipse cx="30" cy="-8" rx="6" ry="5.5" fill="#2244aa"/>
+                <!-- Knuckle glow -->
+                <ellipse cx="-30" cy="-8" rx="11" ry="10" fill="#3366ff" opacity=".2"/>
+                <ellipse cx="30" cy="-8" rx="11" ry="10" fill="#3366ff" opacity=".2"/>
+
+                <!-- Head / neck -->
+                <rect x="-7" y="-8" width="14" height="16" rx="2" fill="#c8a870" opacity=".9"/>
+                <ellipse cx="0" cy="-15" rx="13.5" ry="13" fill="#c8a870"/>
+
+                <!-- Wild curly green hair -->
+                <path d="M-13,-20 Q-20,-42 -8,-38 Q-5,-50 2,-44 Q8,-52 14,-44 Q22,-40 14,-20" fill="#2a4a18"/>
+                <!-- Hair texture -->
+                <path d="M-10,-30 Q-6,-40 0,-36" fill="#344f1f" opacity=".6"/>
+                <path d="M4,-38 Q8,-46 12,-38" fill="#344f1f" opacity=".5"/>
+
+                <!-- Mask -->
+                <ellipse cx="0" cy="-8" rx="10" ry="4.5" fill="#c0a068" opacity=".5"/>
+                <!-- Eyes — determined -->
+                <ellipse cx="-4.5" cy="-17" rx="3.5" ry="3" fill="#1a1a1a"/>
+                <ellipse cx="4.5" cy="-17" rx="3.5" ry="3" fill="#1a1a1a"/>
+                <ellipse cx="-4.5" cy="-17" rx="1.8" ry="2" fill="#2255dd"/>
+                <ellipse cx="4.5" cy="-17" rx="1.8" ry="2" fill="#2255dd"/>
+                <!-- Eyebrow furrow -->
+                <path d="M-7.5,-21.5 L-2,-20" stroke="#8a6830" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M7.5,-21.5 L2,-20" stroke="#8a6830" stroke-width="1.5" stroke-linecap="round"/>
+              </g>
+
+              <!-- Energy arcs around character -->
+              <circle cx="74" cy="115" r="40" fill="none" stroke="#3366ff" stroke-width="1" stroke-dasharray="4 6" opacity=".2"/>
+              <circle cx="74" cy="115" r="55" fill="none" stroke="#2244cc" stroke-width=".6" stroke-dasharray="2 8" opacity=".12"/>
+            </svg>
+
+            <div class="fbadge">Free to Watch</div>
+            <div class="rating-pill">⭐ 8.5</div>
+          </div>
+          <div class="acard-title">My Hero Academia</div>
+          <div class="acard-meta">Ep 1–8 Free · Season 1</div>
+        </div>
+
+        <!-- JJK (partial clip) -->
+        <div class="acard clip">
+          <div class="athumb">
+            <svg viewBox="0 0 148 204" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="jjk1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#040a04"/>
+                  <stop offset="55%" stop-color="#060e06"/>
+                  <stop offset="100%" stop-color="#020808"/>
+                </linearGradient>
+                <radialGradient id="jjkCurse" cx="50%" cy="50%" r="55%">
+                  <stop offset="0%" stop-color="#7700cc" stop-opacity=".35"/>
+                  <stop offset="60%" stop-color="#5500aa" stop-opacity=".1"/>
+                  <stop offset="100%" stop-color="#440088" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="148" height="204" fill="url(#jjk1)"/>
+              <ellipse cx="74" cy="104" rx="65" ry="65" fill="url(#jjkCurse)"/>
+
+              <!-- Background barrier grid -->
+              <g stroke="#440088" stroke-width=".5" opacity=".15">
+                <line x1="0" y1="0" x2="148" y2="204"/>
+                <line x1="148" y1="0" x2="0" y2="204"/>
+                <line x1="74" y1="0" x2="74" y2="204"/>
+                <line x1="0" y1="102" x2="148" y2="102"/>
+              </g>
+
+              <!-- Floating curse energy particles -->
+              <g fill="#9933ff">
+                <circle cx="20" cy="30" r="2.5" opacity=".4"/>
+                <circle cx="125" cy="22" r="1.8" opacity=".35"/>
+                <circle cx="140" cy="80" r="2" opacity=".3"/>
+                <circle cx="12" cy="140" r="1.5" opacity=".3"/>
+                <circle cx="135" cy="155" r="2" opacity=".25"/>
+                <circle cx="40" cy="175" r="1.2" opacity=".2"/>
+                <circle cx="100" cy="170" r="1.5" opacity=".25"/>
+                <circle cx="68" cy="20" r="1.2" opacity=".3"/>
+              </g>
+
+              <!-- Character -->
+              <g transform="translate(74,98)">
+                <!-- Legs slightly apart -->
+                <rect x="-10" y="44" width="9" height="32" rx="3.5" fill="#0a0a0a"/>
+                <rect x="2" y="44" width="9" height="30" rx="3.5" fill="#0d0d0d"/>
+                <!-- Boots -->
+                <rect x="-12" y="70" width="12" height="8" rx="2" fill="#080808"/>
+                <rect x="1" y="68" width="12" height="8" rx="2" fill="#080808"/>
+
+                <!-- Jacket / body -->
+                <rect x="-14" y="4" width="28" height="43" rx="4" fill="#0d0d0d"/>
+                <!-- Jacket collar V-shape -->
+                <path d="M-6,4 L0,14 L6,4" fill="#060606"/>
+                <!-- Jacket lapels -->
+                <path d="M-14,4 L-6,20 L0,14" fill="#111"/>
+                <path d="M14,4 L6,20 L0,14" fill="#111"/>
+                <!-- Jacket buttons -->
+                <circle cx="0" cy="22" r="1.2" fill="#1a1a1a"/>
+                <circle cx="0" cy="30" r="1.2" fill="#1a1a1a"/>
+
+                <!-- Arms wide -->
+                <rect x="-26" y="4" width="14" height="10" rx="3.5" fill="#0d0d0d"/>
+                <rect x="12" y="4" width="14" height="10" rx="3.5" fill="#0d0d0d"/>
+
+                <!-- Cursed energy from palms -->
+                <ellipse cx="-28" cy="12" rx="10" ry="10" fill="#6600cc" opacity=".3"/>
+                <ellipse cx="-28" cy="12" rx="6" ry="6" fill="#8822ff" opacity=".35"/>
+                <ellipse cx="28" cy="12" rx="10" ry="10" fill="#6600cc" opacity=".3"/>
+                <ellipse cx="28" cy="12" rx="6" ry="6" fill="#8822ff" opacity=".35"/>
+
+                <!-- Hands -->
+                <ellipse cx="-28" cy="12" rx="6" ry="5" fill="#c89070"/>
+                <ellipse cx="28" cy="12" rx="6" ry="5" fill="#c89070"/>
+
+                <!-- Neck -->
+                <rect x="-5" y="-6" width="10" height="12" rx="2" fill="#c89070" opacity=".9"/>
+                <!-- Head -->
+                <ellipse cx="0" cy="-18" rx="13" ry="13.5" fill="#c89070"/>
+                <!-- Scar/tattoo marks -->
+                <path d="M-7,-24 Q-5,-18 -7,-12" stroke="#cc2200" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".8"/>
+                <path d="M-7,-24 L-9,-20 M-7,-20 L-9,-16" stroke="#cc2200" stroke-width="1" fill="none" opacity=".6"/>
+
+                <!-- White spiky hair -->
+                <path d="M-13,-24 Q-22,-44 -10,-40 Q-7,-52 0,-46 Q7,-54 12,-44 Q22,-40 14,-24" fill="#e0e0e0"/>
+                <path d="M-10,-36 Q-5,-48 2,-42" fill="#d0d0d0" opacity=".7"/>
+                <path d="M5,-44 Q10,-54 14,-44" fill="#d8d8d8" opacity=".6"/>
+                <!-- Hair shading -->
+                <path d="M-13,-24 Q-14,-30 -10,-28" fill="#aaa" opacity=".3"/>
+
+                <!-- Eyes (one cursed - glowing) -->
+                <ellipse cx="-4.5" cy="-18" rx="4" ry="3.5" fill="#1a1a1a"/>
+                <ellipse cx="4.5" cy="-18" rx="4" ry="3.5" fill="#1a1a1a"/>
+                <ellipse cx="-4.5" cy="-18" rx="2" ry="2.5" fill="#cc0000" opacity=".9"/>
+                <ellipse cx="4.5" cy="-18" rx="2" ry="2.2" fill="#555"/>
+                <!-- Right eye glow -->
+                <ellipse cx="-4.5" cy="-18" rx="3.5" ry="3" fill="#ff2200" opacity=".15"/>
+                <!-- Eyebrows -->
+                <path d="M-8,-23 L-2,-21" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M8,-23 L2,-21" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+              </g>
+
+              <!-- Swirling dark energy tendrils -->
+              <path d="M0,80 Q30,50 60,100 Q90,150 148,120" stroke="#6600cc" stroke-width="1.5" fill="none" opacity=".2"/>
+              <path d="M148,70 Q118,100 88,80 Q58,60 0,110" stroke="#5500aa" stroke-width="1" fill="none" opacity=".15"/>
+            </svg>
+
+            <div class="fbadge" style="font-size:9px">Free to Watch</div>
+            <div class="rating-pill">⭐ 9.4</div>
+          </div>
+          <div class="acard-title">Jujutsu Kaisen</div>
+          <div class="acard-meta">Ep 1–10 Free</div>
+        </div>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-wrap">
+        <button class="cta">
+          <svg width="13" height="15" viewBox="0 0 13 15"><polygon points="0,0 13,7.5 0,15" fill="white"/></svg>
+          Start Watching — It's Free
+        </button>
+      </div>
+
+      <!-- PREMIUM UPSELL -->
+      <div class="prem">
+        <div class="prem-left">
+          <div class="prem-icon">👑</div>
+          <div>
+            <div class="prem-name">Crunchyroll Premium</div>
+            <div class="prem-desc">
+              <span>Full library</span> · <span>Offline</span> · <span>Ad-free</span> · <span>4K HD</span>
+            </div>
+          </div>
+        </div>
+        <button class="sub-btn">Subscribe</button>
+      </div>
+
+      <!-- COMING SOON -->
+      <div class="sec" style="margin-top:4px">
+        <div class="sec-title">Coming Soon</div>
+        <div class="sec-sub"><span class="hi">Selected cartoons &amp; animated series</span></div>
+      </div>
+
+      <div class="comrow">
+
+        <div class="comcard">
+          <div class="comthumb">
+            <svg viewBox="0 0 110 154" style="position:absolute;inset:0;width:100%;height:100%">
+              <defs>
+                <linearGradient id="c1g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#1a1030"/>
+                  <stop offset="100%" stop-color="#0a0a1e"/>
+                </linearGradient>
+              </defs>
+              <rect width="110" height="154" fill="url(#c1g)"/>
+              <circle cx="55" cy="77" r="35" fill="#222" opacity=".5"/>
+              <circle cx="55" cy="77" r="20" fill="#1a1a2a" opacity=".5"/>
+            </svg>
+            <div class="comthumb-inner">
+              <div class="com-lock">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="#666"><path d="M11,6H10V4a3,3,0,0,0-6,0V6H3A1,1,0,0,0,2,7v5a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1V7A1,1,0,0,0,11,6ZM7,10.5A1,1,0,1,1,8,9.5,1,1,0,0,1,7,10.5ZM8.5,6h-3V4a1.5,1.5,0,0,1,3,0Z"/></svg>
+              </div>
+              <div class="com-pill">Coming Soon</div>
+            </div>
+          </div>
+          <div class="com-title">Western Toon</div>
+          <div class="com-sub">TBA 2025</div>
+        </div>
+
+        <div class="comcard">
+          <div class="comthumb">
+            <svg viewBox="0 0 110 154" style="position:absolute;inset:0;width:100%;height:100%">
+              <defs>
+                <linearGradient id="c2g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#1a0808"/>
+                  <stop offset="100%" stop-color="#0e0514"/>
+                </linearGradient>
+              </defs>
+              <rect width="110" height="154" fill="url(#c2g)"/>
+              <circle cx="55" cy="77" r="35" fill="#222" opacity=".5"/>
+              <circle cx="55" cy="77" r="20" fill="#1e1010" opacity=".5"/>
+            </svg>
+            <div class="comthumb-inner">
+              <div class="com-lock">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="#666"><path d="M11,6H10V4a3,3,0,0,0-6,0V6H3A1,1,0,0,0,2,7v5a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1V7A1,1,0,0,0,11,6ZM7,10.5A1,1,0,1,1,8,9.5,1,1,0,0,1,7,10.5ZM8.5,6h-3V4a1.5,1.5,0,0,1,3,0Z"/></svg>
+              </div>
+              <div class="com-pill">Coming Soon</div>
+            </div>
+          </div>
+          <div class="com-title">Animated Film</div>
+          <div class="com-sub">TBA 2025</div>
+        </div>
+
+        <div class="comcard">
+          <div class="comthumb">
+            <svg viewBox="0 0 110 154" style="position:absolute;inset:0;width:100%;height:100%">
+              <defs>
+                <linearGradient id="c3g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#051a0a"/>
+                  <stop offset="100%" stop-color="#020e0e"/>
+                </linearGradient>
+              </defs>
+              <rect width="110" height="154" fill="url(#c3g)"/>
+              <circle cx="55" cy="77" r="35" fill="#222" opacity=".5"/>
+              <circle cx="55" cy="77" r="20" fill="#081e0a" opacity=".5"/>
+            </svg>
+            <div class="comthumb-inner">
+              <div class="com-lock">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="#666"><path d="M11,6H10V4a3,3,0,0,0-6,0V6H3A1,1,0,0,0,2,7v5a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1V7A1,1,0,0,0,11,6ZM7,10.5A1,1,0,1,1,8,9.5,1,1,0,0,1,7,10.5ZM8.5,6h-3V4a1.5,1.5,0,0,1,3,0Z"/></svg>
+              </div>
+              <div class="com-pill">Coming Soon</div>
+            </div>
+          </div>
+          <div class="com-title">Cartoon Series</div>
+          <div class="com-sub">TBA 2025</div>
+        </div>
+
+        <!-- Partial 4th -->
+        <div class="comcard clip2">
+          <div class="comthumb" style="width:110px">
+            <svg viewBox="0 0 110 154" style="position:absolute;inset:0;width:100%;height:100%">
+              <defs>
+                <linearGradient id="c4g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#1a1200"/>
+                  <stop offset="100%" stop-color="#0a0e00"/>
+                </linearGradient>
+              </defs>
+              <rect width="110" height="154" fill="url(#c4g)"/>
+            </svg>
+            <div class="comthumb-inner">
+              <div class="com-lock">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="#444"><path d="M11,6H10V4a3,3,0,0,0-6,0V6H3A1,1,0,0,0,2,7v5a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1V7A1,1,0,0,0,11,6ZM7,10.5A1,1,0,1,1,8,9.5,1,1,0,0,1,7,10.5ZM8.5,6h-3V4a1.5,1.5,0,0,1,3,0Z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="height:16px"></div>
+    </div><!-- /scroll -->
+
+    <!-- BOTTOM NAV -->
+    <div class="botnav">
+      <div class="bni on">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="bni">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <span>Search</span>
+      </div>
+      <div class="bni">
+        <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+        <span>My List</span>
+      </div>
+      <div class="bni">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        <span>Browse</span>
+      </div>
+      <div class="bni">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Profile</span>
+      </div>
+    </div>
+
+    <div class="concept">Proposed Concept – Workshop 4</div>
+
+  </div><!-- /screen -->
+</div><!-- /phone -->
+</body>
+</html>
